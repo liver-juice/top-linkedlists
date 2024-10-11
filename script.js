@@ -1,86 +1,168 @@
-// step 1: breathe. step 2: think. what the fuck are we doing here. 
-// we have to create the functionaliy to make a linked list.
-// we have to make the functionality to make new nodes in that linked list.
-// we need the methods/algorithms to actually search through that linked list and access our data nodes.
-// this is a linear data structure. linked lists, doubly linked, circular linked.\
-// linked lists do not require a contiguous block in memory. each node is just sprinkled randomly within our ram sticks-
-// because they can access eachother through pointers. 
-// linked lists are an entry into more sophisticated data structures and traversals.
-// a data structure is just an efficient way of storing data for a specific task.
-// an object, array, variable, are all data structures.
-// these structures sometimes hold millions of pieces of data, so efficient algorithms are necessary.
-// we calculate an algorithms efficiency in time complexity, typically with Big O notation(most possible steps).
-// something like a binary tree uses the divide and conquer technique, nodes can point to multiple nodes. O(log n);
-// i assume a linked list is O(n), considering we must traverse the entire list starting at the head, calling the pointers to find our value.
-// linked lists are not useful in javascript compared to other languages, and I dont remember why.
-// objects that point to objects.
 
 let linkedList = () => {
 
+    let headNode = null;
+    let tailNode = null;
+    let length = 0;
+
+    // IF NODE.NEXTNODE === NULL; WE ARE AT THE END.
+
     let append = (value) => {
         // adds a new node containing value to the end of the list
-        // create the node with value
-        // our last node is given a pointer to this node.
+
+        let newNode = new Node(value);
+        
+        if (headNode === null){
+            // if the list is empty, insert it to the head.
+            headNode = newNode;
+            tailNode = newNode;
+        }else{
+            // else we assign it to the end;
+            tailNode.nextNode = newNode;
+            tailNode = newNode;
+        }
+        // increment counter
+        length++;
+
+        // if (node.nextNode === null) // MEANS ITS THE LAST IN LINE.
     }
 
     let prepend = (value) => {
         // adds a new node containing value to the start of the list
+
         // create the node
-        // give this node a pointer to the first node.
+        let newNode = new Node(value);
+        if (headNode === null){
+            // conditional branch if the list happens to be empty.
+            headNode = newNode;
+            tailNode = newNode;
+        }else{
+            // reassign this new pointer to the (about to be old) headNode
+            newNode.next = headNode;
+            newNode = headNode
+        }
+        length++;
     }
 
     let size = () => {
         // returns the total number of nodes in the list
-
-        // iterate through the nodes, incrementing a counter.
+        return length;
         // return the counter.
     }
 
     let head = () => {
         // returns the first node in the list
+        return headNode;
+
     }
 
     let tail = () => {
         // returns the last node in the list
+        return tailNode;
+
     }
 
     let at = (index) => {
-        // returns the node at the given index
-        // iterate x indexes. return the node.
+
+        let currentNode = headNode;
+        // increments for x many indexes in our array, each iteration checks for null. returns the index at the end.
+        for (let i = 0; i < index; i++){
+            if (currentNode === null){
+                return null;
+            }
+            currentNode = currentNode.next;
+        }
+
+        return currentNode;
     }
 
     let pop = () => {
         // removes the last element from the list
-        // iterates to the end. 
-        // pops that bitch off
+
+        if (headNode === null){
+            // if the list is empty
+            return null;
+        }
+
+        if (headNode.next === null){
+            // if the list only has one node:
+            let removedNode = headNode;
+            headNode = null;
+            tailNode = null;
+            length--;
+            return removedNode;
+        }
+
+        // traverse list, find second to last node
+        let currentNode = headNode;
+        while (currentNode.next.next !== null){
+            currentNode = currentNode.next;
+        }
+
+        // set the tailnode to be the second to last node.
+        let removedNode = currentNode.next;
+        currentNode.next = null;
+        tailNode = currentNode;
+        length--;
+
+        return removedNode;
     }
 
     let contains = (value) => {
         // returns true if the passed in value is in the list and otherwise returns false.
-        // iterate through the linked list.
-        // if node.value === value
-        // return true
-        // else return false.
+        let currentNode = headNode;
+        for (let i = 0; i < length; i++){
+            if (currentNode.value === value){
+                return true;
+            }
+            // we keep it movin
+            currentNode = currentNode.next;
+        }
+        return false;
     }
 
     let find = (value) => {
         // returns the index of the node containing value, or null if not found.
-        // iterate through the linked list incrementing a counter.
-        // if node.value === value return counter.
-        // else return null
+        let counter = 0;
+        let currentNode = headNode;
+
+        if (currentNode.value === value){
+            return counter;
+        }
+
+        while (currentNode !== null){
+            if (currentNode.value === value){
+                return counter;
+            }
+            currentNode = currentNode.next;
+            counter++;
+        }
+
+        return null;
     }
 
     let toString = () => {
         // represents your LinkedList objects as strings, so you can print them out and preview them in the console.
         // The format should be: ( value ) -> ( value ) -> ( value ) -> null
+
+        let strang = '';
+        let currentNode = headNode;
+
+        while (currentNode !== null){
+            strang += `( ${currentNode.value} ) -> `;
+            currentNode = currentNode.next;
+        }
+        strang += 'null'; //slap the null on the end.
+        return strang;
     }
+
 
     return {append, prepend, size, head, tail, at, pop, contains, find, toString};
 }
 
 let Node = (value=null, nextNode=null) => {
-    
-    return {};
+
+    return {value, nextNode};
 }
 
 
